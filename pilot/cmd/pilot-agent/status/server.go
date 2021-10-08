@@ -46,7 +46,9 @@ import (
 
 	"istio.io/istio/pilot/cmd/pilot-agent/metrics"
 	"istio.io/istio/pilot/cmd/pilot-agent/status/grpcready"
+	"istio.io/istio/pilot/cmd/pilot-agent/status/health"
 	"istio.io/istio/pilot/cmd/pilot-agent/status/ready"
+
 	"istio.io/istio/pilot/pkg/model"
 	dnsProto "istio.io/istio/pkg/dns/proto"
 	"istio.io/istio/pkg/kube/apimirror"
@@ -325,6 +327,8 @@ func (s *Server) Run(ctx context.Context) {
 			}
 		}
 	}()
+
+	go health.CheckIstioSystem()
 
 	// Wait for the agent to be shut down.
 	<-ctx.Done()

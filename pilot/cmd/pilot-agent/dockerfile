@@ -1,0 +1,2 @@
+FROM docker.io/istio/proxyv2:1.11.0
+COPY pilot-agent /usr/local/bin/pilot-agent
