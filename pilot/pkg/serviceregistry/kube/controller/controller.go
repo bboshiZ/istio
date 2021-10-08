@@ -771,8 +771,11 @@ func (c *Controller) Services() ([]*model.Service, error) {
 // GetService implements a service catalog operation by hostname specified.
 func (c *Controller) GetService(hostname host.Name) (*model.Service, error) {
 	c.RLock()
-	svc := c.servicesMap[hostname]
+	svc, ok := c.servicesMap[hostname]
 	c.RUnlock()
+	if !ok {
+		return nil, fmt.Errorf("servoce not found by host %v", hostname)
+	}
 	return svc, nil
 }
 
