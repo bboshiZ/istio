@@ -189,7 +189,9 @@ func (configgen *ConfigGeneratorImpl) buildSidecarOutboundHTTPRouteConfig(
 
 	util.SortVirtualHosts(virtualHosts)
 
+	var catchAllVirtualHostName string
 	if !useSniffing {
+		catchAllVirtualHostName = node.CatchAllVirtualHost.Name
 		virtualHosts = append(virtualHosts, node.CatchAllVirtualHost)
 	}
 
@@ -207,6 +209,9 @@ func (configgen *ConfigGeneratorImpl) buildSidecarOutboundHTTPRouteConfig(
 		Resource: util.MessageToAny(out),
 	}
 
+	if node.CatchAllVirtualHost.Name == "" {
+		node.CatchAllVirtualHost.Name = catchAllVirtualHostName
+	}
 	if features.EnableRDSCaching && routeCache != nil {
 		configgen.Cache.Add(routeCache, req, resource)
 	}
